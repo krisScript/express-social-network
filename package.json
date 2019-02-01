@@ -1,0 +1,31 @@
+{
+  "name": "express-social-network",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kristiyan Todorov",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bulma": "^0.7.2",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^2.0.6",
+    "csurf": "^1.9.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.3.1",
+    "mongodb": "^3.1.11",
+    "mongoose": "^5.4.4",
+    "node-sass-middleware": "^0.11.0",
+    "nodemailer": "^5.1.1",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "randomstring": "^1.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
