@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const { validationResult } = require('express-validator/check');
+const errorFunc = require('../util/errorFunc')
 exports.getAddMessage = (req, res, next) => {
   res.render('messages/add-message', {
     title: 'Add Message',
@@ -10,104 +11,127 @@ exports.getAddMessage = (req, res, next) => {
   });
 };
 
-exports.postAddMessage = (req, res, next) => {
-  const { title, messageContent } = req.body;
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    console.log(errors.array());
-    return res.status(422).render('messages/add-message', {
-      title: 'Add Message',
-      path: '/add-message',
-      editing: false,
-      hasError: true,
-      message: {
-        title,
-        messageContent
-      },
-      errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array()
-    });
+exports.postAddPost = async (req, res, next) => {
+  try{
+    const { title, postContent } = req.body;
+    const {user} = req
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+      const errorMsg = errors.array()[0].msg;
+        res.json({ error: errorMsg });
+    }else {
+      res.status(200).json({msg:'Post succesfully added'});
+         const post = new Post({
+            title,
+            postContent,
+            userName:req.user.userName,
+            userId:req.user.id
+          });
+          console.log(user)
+          console.log(post)
+       await post.save()
+    }
   }
-  const message = new Message({
-    title,
-    messageContent,
-    userId: req.user
-  });
-  message
-    .save()
-    .then(result => {
-      res.redirect('/messages');
-    })
-    .catch(error => {
-      {
-        throw error;
-      }
-    });
-};
-
-exports.getEditMessage = (req, res, next) => {
-  const { edit } = req.query;
-
-  if (!edit) {
-    return res.redirect('/');
+  catch(err){
+    errorFunc(err,next)
   }
-  const { messageId } = req.params;
-  Message.findById(messageId)
-    .then(message => {
-      if (!message) {
-        return res.redirect('/');
-      }
-      res.render('messages/add-message', {
-        title: 'Edit Message',
-        path: '/edit-message',
-        editing: edit,
-        message,
-        hasError: false,
-        errorMessage: null,
-        validationErrors: []
-      });
-    })
-    .catch(error => {
-      throw error;
-    });
-};
 
-exports.postEditMessage = (req, res, next) => {
-  const { messageId } = req.body;
-  const updatedTitle = req.body.title;
-  const updatedMessageContent = req.body.messageContent;
+ 
+  //   if (!errors.isEmpty()) {
+  //     console.log(errors.array());
+  //     return res.status(422).render('messages/add-message', {
+  //       title: 'Add Message',
+  //       path: '/add-message',
+  //       editing: false,
+  //       hasError: true,
+  //       message: {
+  //         title,
+  //         messageContent
+  //       },
+  //       errorMessage: errors.array()[0].msg,
+  //       validationErrors: errors.array()
+  //     });
+  //   }
+  //   const message = new Message({
+  //     title,
+  //     messageContent,
+  //     userId: req.user
+  //   });
+  //   message
+  //     .save()
+  //     .then(result => {
+  //       res.redirect('/messages');
+  //     })
+  //     .catch(error => {
+  //       {
+  //         throw error;
+  //       }
+  //     });
+  // };
 
-  const errors = validationResult(req);
+  // exports.getEditMessage = (req, res, next) => {
+  //   const { edit } = req.query;
 
-  if (!errors.isEmpty()) {
-    return res.status(422).render('messages/add-message', {
-      title: 'Edit Message',
-      path: '/edit-message',
-      editing: true,
-      hasError: true,
-      message: {
-        title: updatedTitle,
-        messageContent: updatedMessageContent,
-        _id: messageId
-      },
-      errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array()
-    });
-  }
-  Message.findById(messageId)
-    .then(message => {
-      if (message.userId.toString() !== req.user._id.toString()) {
-        return res.redirect('/');
-      }
-      message.title = updatedTitle;
-      message.messageContent = updatedMessageContent;
-      return message.save().then(result => {
-        res.redirect('/user-messages');
-      });
-    })
-    .catch(error => {
-      throw error;
-    });
+  //   if (!edit) {
+  //     return res.redirect('/');
+  //   }
+  //   const { messageId } = req.params;
+  //   Message.findById(messageId)
+  //     .then(message => {
+  //       if (!message) {
+  //         return res.redirect('/');
+  //       }
+  //       res.render('messages/add-message', {
+  //         title: 'Edit Message',
+  //         path: '/edit-message',
+  //         editing: edit,
+  //         message,
+  //         hasError: false,
+  //         errorMessage: null,
+  //         validationErrors: []
+  //       });
+  //     })
+  //     .catch(error => {
+  //       throw error;
+  //     });
+  // };
+
+  // exports.postEditMessage = (req, res, next) => {
+  //   const { messageId } = req.body;
+  //   const updatedTitle = req.body.title;
+  //   const updatedMessageContent = req.body.messageContent;
+
+  //   const errors = validationResult(req);
+
+  //   if (!errors.isEmpty()) {
+  //     return res.status(422).render('messages/add-message', {
+  //       title: 'Edit Message',
+  //       path: '/edit-message',
+  //       editing: true,
+  //       hasError: true,
+  //       message: {
+  //         title: updatedTitle,
+  //         messageContent: updatedMessageContent,
+  //         _id: messageId
+  //       },
+  //       errorMessage: errors.array()[0].msg,
+  //       validationErrors: errors.array()
+  //     });
+  //   }
+  //   Message.findById(messageId)
+  //     .then(message => {
+  //       if (message.userId.toString() !== req.user._id.toString()) {
+  //         return res.redirect('/');
+  //       }
+  //       message.title = updatedTitle;
+  //       message.messageContent = updatedMessageContent;
+  //       return message.save().then(result => {
+  //         res.redirect('/user-messages');
+  //       });
+  //     })
+  //     .catch(error => {
+  //       throw error;
+  //     });
 };
 
 exports.getUserMessages = (req, res, next) => {

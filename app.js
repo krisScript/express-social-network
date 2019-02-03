@@ -8,6 +8,7 @@ const User = require('./models/user');
 
 //Routers
 const homeRouter = require('./routes/home');
+const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const messagesRouter = require('./routes/posts');
 
@@ -82,6 +83,7 @@ app.use((req, res, next) => {
 app.use(homeRouter);
 app.use(messagesRouter)
 app.use(authRouter);
+app.use(userRouter)
 
 process.on('unhandledRejection', (reason, p) => {
   console.log(reason)

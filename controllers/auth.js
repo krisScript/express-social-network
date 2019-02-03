@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 const User = require('../models/user');
 const crypto = require('crypto');
-
+const errorFunc = require('../util/errorFunc')
 const { validationResult } = require('express-validator/check');
 const sendgridAPIKey = require('../config/keys').sendgridAPIKey;
 
@@ -14,11 +14,7 @@ const transporter = nodemailer.createTransport(
     }
   })
 );
-const errorFunc = (err, next) => {
-  const error = new Error(err);
-  error.httpStatusCode = 500;
-  return next(error);
-};
+
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
   if (message.length > 0) {
