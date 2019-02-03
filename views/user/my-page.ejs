@@ -52,7 +52,7 @@
           </div>
            <div class="column is-half" id="posts-container">
               <% for (let post of posts) { %>
-               <div class="card">
+               <div class="card" id="post-<%= post._id %>">
                     <header class="card-header">
                       <p class="card-header-title">
                           <%= post.title %>
@@ -66,13 +66,13 @@
                     <div class="card-content">
                       <div class="content">
                           <%= post.postContent %>
-                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                        
                       </div>
                     </div>
                     <footer class="card-footer">
                       <a href="#" class="card-footer-item">Save</a>
-                      <a href="#" class="card-footer-item">Edit</a>
-                      <a href="#" class="card-footer-item">Delete</a>
+                      <button  data-postId='<%= post._id %>' class="card-footer-item edit-btn">Edit</button>
+                      <button data-postId='<%= post._id %>' class="card-footer-item delete-btn">Delete</button>
                     </footer>
                   </div>
                 <% }  %> 

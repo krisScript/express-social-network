@@ -25,6 +25,11 @@ router.post(
   postsController.postAddPost
 );
 
+router.delete('/delete-post/:postId',isAuth,postsController.deletePost)
+
+router.get('/get-edit-post/:postId',isAuth,postsController.getEditPost)
+
+router.post('/post-edit-post/:postId',isAuth,postsController.postEditPost)
 // router.get(
 //   '/edit-message/:messageId',
 //   isAuth,
