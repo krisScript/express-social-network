@@ -62,14 +62,21 @@ exports.getEditPost = async (req, res, next) => {
 };
 exports.postEditPost = async (req,res,next) => {
   try{
-    const {title,postContent}  = req.body
-    const {postId} = req.params
-    const post = {
-      title,
-      postContent
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const errorMsg = errors.array()[0].msg;
+      res.json({ error: errorMsg });
+    }else  {
+      const {title,postContent}  = req.body
+      const {postId} = req.params
+      const post = {
+        title,
+        postContent
+      }
+      await Post.findOneAndUpdate({_id:postId},post)
+      res.status(200).json({msg:'updated'})
     }
-    await Post.findOneAndUpdate({_id:postId},post)
-    res.status(200).json({msg:'updated'})
+   
   }catch(err){
     errorFunc(err,next)
   }
@@ -209,3 +216,48 @@ exports.postEditPost = async (req,res,next) => {
 //     .catch(error => {
 //       throw error;
 //     });
+
+
+
+// <div class="column is-half">
+// <div class="columns" id="posts-container">
+//     <% for (let post of posts) { %>
+//       <div class="column is-half" id="post-<%= post._id %>">
+//           <div class="box" >
+//               <article class="media" >
+//                   <figure class="media-left">
+//                     <p class="image is-64x64">
+//                       <img src="https://bulma.io/images/placeholders/128x128.png">
+//                     </p>
+//                   </figure>
+//                   <div class="media-content">
+//                     <div class="content">
+//                       <p>
+//                         <strong> <%= firstName %>  <%= lastName %></strong> <small> <%= email %></small>
+//                         <br>
+//                         <strong><%= post.title %></strong>
+//                         <br>
+//                         <p> <%= post.postContent %></p>
+//                       </p>
+//                     </div>
+//                     <nav class="level is-mobile">
+//                       <div class="level-left">
+//                           <a href="#" class="level-item">Save</a>
+//                           <button  data-postId='<%= post._id %>' class="level-item edit-btn">Edit</button>
+//                           <button data-postId='<%= post._id %>' class="level-item delete-btn">Delete</button>
+//                       </div>
+//                     </nav>
+//                   </div>
+//                   <div class="media-right">
+//                     <button class="delete"></button>
+//                   </div>
+//                 </article>
+//           </div>
+          
+//       </div>
+      
+  
+//       <% }  %> 
+// </div>
+  
+// </div>

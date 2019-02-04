@@ -19,8 +19,8 @@ const deleteBtnFunc = () => {
           .then(response => {
             console.log(response);
             if (response.msg === 'postDeleted') {
-              console.log(e.target.parentElement);
-              e.target.parentElement.parentElement.remove();
+              const selectedPost = document.querySelector(`#post-${postId}`);
+              selectedPost.remove();
             }
           });
       });
@@ -48,7 +48,6 @@ const openEditModal = () => {
           })
           .then(response => {
             if (response.error) {
-              console.log(response.error);
             } else {
               const post = response[0];
               const body = document.body;
@@ -110,10 +109,10 @@ const openEditModal = () => {
 
             `;
               body.appendChild(modal);
-              const closeModalBtn = document.getElementById('close-modal-btn')
-              closeModalBtn.addEventListener('click',e => {
-                modal.remove()
-              })
+              const closeModalBtn = document.getElementById('close-modal-btn');
+              closeModalBtn.addEventListener('click', e => {
+                modal.remove();
+              });
               const editForm = document.querySelector('#edit-form');
               editForm.addEventListener('submit', e => {
                 e.preventDefault();
@@ -139,14 +138,30 @@ const openEditModal = () => {
                     }
                   })
                   .then(response => {
-                    if ((response.msg = 'updated')) {
+                    if (response.msg === 'updated') {
                       const postElement = document.getElementById(
                         `post-${postId}`
                       );
-                      postElement.firstElementChild.firstElementChild.textContent =
-                        post.title;
-                      postElement.children[1].children[0].textContent =
-                        post.postContent;
+                      const elementTitle = document.getElementById(
+                        `title-${postId}`
+                      );
+                      elementTitle.textContent = post.title;
+
+                      const elementContent = document.getElementById(
+                        `content-${postId}`
+                      );
+                      elementContent.textContent = post.postContent;
+                    } else {
+                      const errorMsg = document.createElement('div');
+                      errorMsg.className = 'notification is-danger';
+                      errorMsg.innerHTML = ` <p>${response.error}</p>`;
+                      editForm.insertBefore(
+                        errorMsg,
+                        editForm.firstElementChild
+                      );
+                      setTimeout(() => {
+                        errorMsg.remove();
+                      }, 2000);
                     }
                   });
               });
@@ -194,30 +209,38 @@ if (postForm) {
         } else {
           const { postId } = response;
           const postElement = document.createElement('div');
-          postElement.className = 'card';
+          const fullName = document.getElementById('user-fullName').textContent;
+          const email = document.getElementById('user-email').textContent;
+          postElement.className = 'column is-full box  ';
           postElement.id = `post-${postId}`;
           postElement.innerHTML = `
-        <header class="card-header">
-          <p class="card-header-title">
-           ${title}
-          </p>
-          <a href="#" class="card-header-icon" aria-label="more options">
-            <span class="icon">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </a>
-        </header>
-        <div class="card-content">
-          <div class="content">
-            ${postContent}
-            
+
+          <article class="media">
+          <figure class="media-left">
+            <p class="image is-64x64">
+              <img src="https://bulma.io/images/placeholders/128x128.png">
+            </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>${fullName}</strong> <small> ${email}</small>
+                <br>
+                <strong id="title-${postId}">${title}</strong>
+                <br>
+                <p id="content-${postId}"> ${postContent} </p>
+              </p>
+            </div>
+            <nav class="level is-mobile">
+              <div class="level-left">
+                  <a href="#" class="level-item">Save</a>
+                  <button  data-postId='${postId}' class="level-item edit-btn">Edit</button>
+                  <button data-postId='${postId}' class="level-item delete-btn">Delete</button>
+              </div>
+            </nav>
           </div>
-        </div>
-        <footer class="card-footer">
-          <a href="#" class="card-footer-item">Save</a>
-          <button  data-postId='${postId} class="card-footer-item edit-btn">Edit</button>
-          <button data-postId='${postId}'class="card-footer-item delete-btn">Delete</button>
-        </footer>
+        </article>
+        
       `;
           const postsContainer = document.getElementById('posts-container');
           postsContainer.insertBefore(
