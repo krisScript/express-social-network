@@ -14,7 +14,6 @@ exports.getAddMessage = (req, res, next) => {
 exports.postAddPost = async (req, res, next) => {
   try {
     const { title, postContent } = req.body;
-    const { user } = req;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errorMsg = errors.array()[0].msg;
@@ -26,8 +25,6 @@ exports.postAddPost = async (req, res, next) => {
         userName: req.user.userName,
         userId: req.user.id
       });
-      console.log(user);
-      console.log(post);
       await post.save();
       res.status(200).json({ msg: 'Post succesfully added', postId: post._id });
     }
@@ -47,10 +44,9 @@ exports.deletePost = async (req, res, next) => {
 exports.getEditPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
-    console.log(req.params)
-    console.log(postId)
+
     const post = await Post.find({ _id: postId }).select('title postContent');
-    console.log(post)
+
     if (post) {
       res.status(200).json(post);
     } else {
@@ -60,28 +56,26 @@ exports.getEditPost = async (req, res, next) => {
     errorFunc(err, next);
   }
 };
-exports.postEditPost = async (req,res,next) => {
-  try{
+exports.postEditPost = async (req, res, next) => {
+  try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errorMsg = errors.array()[0].msg;
       res.json({ error: errorMsg });
-    }else  {
-      const {title,postContent}  = req.body
-      const {postId} = req.params
+    } else {
+      const { title, postContent } = req.body;
+      const { postId } = req.params;
       const post = {
         title,
         postContent
-      }
-      await Post.findOneAndUpdate({_id:postId},post)
-      res.status(200).json({msg:'updated'})
+      };
+      await Post.findOneAndUpdate({ _id: postId }, post);
+      res.status(200).json({ msg: 'updated' });
     }
-   
-  }catch(err){
-    errorFunc(err,next)
+  } catch (err) {
+    errorFunc(err, next);
   }
-  
-}
+};
 // exports.getUserMessages = (req, res, next) => {
 //   Message.find({ userId: req.user._id })
 //     .then(messages => {
@@ -217,8 +211,6 @@ exports.postEditPost = async (req,res,next) => {
 //       throw error;
 //     });
 
-
-
 // <div class="column is-half">
 // <div class="columns" id="posts-container">
 //     <% for (let post of posts) { %>
@@ -253,11 +245,10 @@ exports.postEditPost = async (req,res,next) => {
 //                   </div>
 //                 </article>
 //           </div>
-          
+
 //       </div>
-      
-  
-//       <% }  %> 
+
+//       <% }  %>
 // </div>
-  
+
 // </div>

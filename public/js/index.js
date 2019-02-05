@@ -1,12 +1,12 @@
 const postForm = document.getElementById('post-form');
-const deleteBtnFunc = () => {
+const csrf = document.querySelector("[name='_csrf']").value;
+
+const deletePost = () => {
   const deleteBtnList = document.querySelectorAll('.delete-btn');
   if (deleteBtnList.length > 0) {
     deleteBtnList.forEach(deleteBtn => {
       deleteBtn.addEventListener('click', e => {
         const postId = e.target.getAttribute('data-postId');
-
-        const csrf = document.querySelector("[name='_csrf']").value;
         fetch(`delete-post/${postId}`, {
           method: 'DELETE',
           headers: {
@@ -17,7 +17,6 @@ const deleteBtnFunc = () => {
             return response.json();
           })
           .then(response => {
-            console.log(response);
             if (response.msg === 'postDeleted') {
               const selectedPost = document.querySelector(`#post-${postId}`);
               selectedPost.remove();
@@ -27,14 +26,12 @@ const deleteBtnFunc = () => {
     });
   }
 };
-const openEditModal = () => {
+const editPost = () => {
   const editBtnList = document.querySelectorAll('.edit-btn');
   if (editBtnList.length > 0) {
     editBtnList.forEach(btn => {
       btn.addEventListener('click', e => {
-        const csrf = document.querySelector("[name='_csrf']").value;
         const postId = e.target.getAttribute('data-postId');
-        console.log(e.target.parentElement);
         fetch(`/get-edit-post/${postId}`, {
           method: 'GET',
           headers: {
@@ -248,11 +245,11 @@ if (postForm) {
             postsContainer.firstElementChild
           );
           e.target.reset();
-          deleteBtnFunc();
-          openEditModal();
+          deletePost();
+          editPost();
         }
       });
   });
 }
-openEditModal();
-deleteBtnFunc();
+editPost();
+deletePost();

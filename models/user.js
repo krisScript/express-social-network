@@ -27,6 +27,9 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  profilePicture: {
+    type: String,
+  },
   resetToken: String,
   resetTokenExpiration: Date,
   // postsData: {

@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 
-
 //Models
 
 const User = require('./models/user');
@@ -23,8 +22,8 @@ const bodyParser = require('body-parser');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const sassMiddleware = require('node-sass-middleware');
-const randomstring = require('randomstring')
-
+const randomstring = require('randomstring');
+const multer = require('multer');
 const app = express();
 
 const MONGODB_URI = require('./config/keys').mongoURI;
@@ -34,6 +33,31 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      `${new Date().toISOString().replace(/:/g, '-')}` +
+        '-' +
+        file.originalname
+    );
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 app.set('view engine', 'ejs');
 
@@ -47,8 +71,12 @@ app.use(
 );
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(
   session({
@@ -79,16 +107,14 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(homeRouter);
-app.use(messagesRouter)
+app.use(messagesRouter);
 app.use(authRouter);
-app.use(userRouter)
+app.use(userRouter);
 
 process.on('unhandledRejection', (reason, p) => {
-  console.log(reason)
+  console.log(reason);
 });
-
 
 app.get('/500', errorController.get500);
 
@@ -103,13 +129,10 @@ app.use(errorController.get404);
 // });
 
 mongoose
-  .connect(
-    MONGODB_URI,
-    { useNewUrlParser: true }
-  )
+  .connect(MONGODB_URI, { useNewUrlParser: true })
   .then(result => {
-    app.listen(5000);
+    app.listen(3000);
   })
   .catch(error => {
-    throw error
+    throw error;
   });

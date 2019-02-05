@@ -20,71 +20,41 @@
       </section>
    <section class="section columns">
      <div class="column is-half">
-        <nav class="panel">
-            <p class="panel-heading">
-              repositories
-            </p>
-            <div class="panel-block">
-              <p class="control has-icons-left">
-                <input class="input is-small" type="text" placeholder="search">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-search" aria-hidden="true"></i>
-                </span>
-              </p>
-            </div>
-            <p class="panel-tabs">
-              <a class="is-active">all</a>
-              <a>public</a>
-              <a>private</a>
-              <a>sources</a>
-              <a>forks</a>
-            </p>
-            <a class="panel-block is-active">
-              <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-              </span>
-              bulma
-            </a>
-            <a class="panel-block">
-              <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-              </span>
-              marksheet
-            </a>
-            <a class="panel-block">
-              <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-              </span>
-              minireset.css
-            </a>
-            <a class="panel-block">
-              <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-              </span>
-              jgthms.github.io
-            </a>
-            <a class="panel-block">
-              <span class="panel-icon">
-                <i class="fas fa-code-branch" aria-hidden="true"></i>
-              </span>
-              daniellowtw/infboard
-            </a>
-            <a class="panel-block">
-              <span class="panel-icon">
-                <i class="fas fa-code-branch" aria-hidden="true"></i>
-              </span>
-              mojs
-            </a>
-            <label class="panel-block">
-              <input type="checkbox">
-              remember me
-            </label>
-            <div class="panel-block">
-              <button class="button is-link is-outlined is-fullwidth">
-                reset all filters
-              </button>
-            </div>
-          </nav>
+      <div class="columns is-multiline">
+        <div class="box column is-8">
+          <form  method="POST" enctype="multipart/form-data" id="form-profile-picture" action="/user-add-profile-picture">
+            <% if (errorMessage) { %>
+              <div class="notification is-danger">
+                <p><%= errorMessage %></p>
+              </div>
+            <% } %>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <div class="field ">
+                  <div class="file has-name is-primary">
+                      <label class="file-label">
+                        <input class="file-input" type="file" name="image">
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                          </span>
+                          <span class="file-label">
+                            Choose a file…
+                          </span>
+                        </span>
+                        <span class="file-name">
+                         Change your profile picture
+                        </span>
+                      </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control ">
+                        <button  class="button is-primary">Change</button>
+                      </div>
+                </div>
+          </form>
+        </div>
+      </div>
      </div>
 <div class="column is-half">
   <div class="columns is-multiline">
