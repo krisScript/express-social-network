@@ -3,22 +3,19 @@ const errorFunc = require('../util/errorFunc');
 const User = require('../models/user');
 const fileDelete = require('../util/fileDelete');
 const { validationResult } = require('express-validator/check');
-exports.getImages =async  (req, res, next) => {
-    try{
-        const images =   await Image.find({ userId: req.user._id });
-        res.render('user/images', {
-            title: 'Images',
-            path: '/user-images',
-            images,
-            errorMessage: false,
-            validationErrors: []
-          });
-    }
-    catch(err){
-        errorFunc(err,next)
-    }
-    
-  
+exports.getImages = async (req, res, next) => {
+  try {
+    const images = await Image.find({ userId: req.user._id });
+    res.render('user/images', {
+      title: 'Images',
+      path: '/user-images',
+      images,
+      errorMessage: false,
+      validationErrors: []
+    });
+  } catch (err) {
+    errorFunc(err, next);
+  }
 };
 
 exports.postImages = async (req, res, next) => {
@@ -26,21 +23,21 @@ exports.postImages = async (req, res, next) => {
     const imageFile = req.file;
     const imageUrl = imageFile.path;
     const errors = validationResult(req);
-    const {description} = req.body
-    console.log(imageFile)
+    const { description } = req.body;
+    console.log(imageFile);
     if (!imageFile) {
-      const images =   await Image.find({ userId: req.user._id });
-        fileDelete(imageUrl)
-        return res.status(422).render('user/images', {
-          title: 'images',
-          path: '/user-images',
-          errorMessage: 'Attached file is not an image.',
-          validationErrors: [],
-          images
-        });
-        }
-   if (!errors.isEmpty()) {
-     fileDelete(imageUrl)
+      const images = await Image.find({ userId: req.user._id });
+      fileDelete(imageUrl);
+      return res.status(422).render('user/images', {
+        title: 'images',
+        path: '/user-images',
+        errorMessage: 'Attached file is not an image.',
+        validationErrors: [],
+        images
+      });
+    }
+    if (!errors.isEmpty()) {
+      fileDelete(imageUrl);
       return res.status(422).render('user/images', {
         path: '/user-images',
         title: 'Images',
@@ -50,18 +47,30 @@ exports.postImages = async (req, res, next) => {
         images
       });
     } else {
-        console.log(imageUrl)
+      console.log(imageUrl);
       const image = new Image({
         imageUrl,
         description,
         userName: req.user.userName,
         userId: req.user.id
       });
-      
+
       await image.save();
-      res.redirect('/user-images')
+      res.redirect('/user-images');
     }
   } catch (err) {
     errorFunc(err, next);
   }
 };
+
+exports.deleteImage = async (req, res, next) => {
+  try {
+    const { imageId } = req.params;
+    console.log(imageId);
+    await Image.findByIdAndDelete({ _id: imageId });
+    res.redirect('/user-images');
+  } catch (err) {
+    errorFunc(err, next);
+  }
+};
+

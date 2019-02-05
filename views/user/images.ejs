@@ -3,6 +3,7 @@
   
   <body>
      <%- include('../includes/nav.ejs') %>
+
   <section class="section">
       <form class="box" method="POST" enctype="multipart/form-data" action="/user-images">
         <% if (errorMessage) { %>
@@ -63,7 +64,7 @@
                       </div>
                   </div>
                   <footer class="card-footer">
-                      <a class="card-footer-item">
+                      <a class="card-footer-item" href="/delete-image/<%= image._id %>">
                         delete
                       </a>
                   </footer>
