@@ -6,9 +6,17 @@
      <section class="hero is-small is-primary is-bold">
         <div class="hero-body">
           <div class="container">
-            <figure class="image is-128x128">
-                <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
-              </figure>
+              <% if (profilePicture) { %>    
+                <figure class="rounded-img-container">
+                    <img class="rounded-img" src="<%= profilePicture %>">
+                  </figure>
+                <% }  else { %>
+                  <span class="icon  is-large">
+                      <i class="fas fa-user-circle"></i>
+                    </span>
+                  <% } %>
+               
+          
               <h1 class="title" id="user-fullName">
                   <%= firstName %> <%= lastName %>
                 </h1>
@@ -17,22 +25,31 @@
                   </h2>
           </div>
         </div>
+        <div class="hero-foot">
+            <div class="tabs is-centered has-background-link">
+                <ul>
+                  <li class="is-active"><a href="/my-page">My Page</a></li>
+                  <li><a href="/user-images">Images</a></li>
+                  <li><a href="/friends">Friend</a></li>
+                </ul>
+              </div>
+        </div>
       </section>
    <section class="section columns">
      <div class="column is-half">
       <div class="columns is-multiline">
         <div class="box column is-8">
-          <form  method="POST" enctype="multipart/form-data" id="form-profile-picture" action="/user-add-profile-picture">
+          <form  method="POST" enctype="multipart/form-data" id="form-profile-picture" action="/my-page">
             <% if (errorMessage) { %>
               <div class="notification is-danger">
                 <p><%= errorMessage %></p>
               </div>
-            <% } %>
+            <% }  %>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <div class="field ">
                   <div class="file has-name is-primary">
                       <label class="file-label">
-                        <input class="file-input" type="file" name="image">
+                        <input class="file-input" type="file" name="image" required>
                         <span class="file-cta">
                           <span class="file-icon">
                             <i class="fas fa-upload"></i>

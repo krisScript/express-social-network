@@ -5,10 +5,6 @@ const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 const { body } = require('express-validator/check');
-// router.get('/add-message', isAuth, postsController.getAddMessage);
-// router.get('/messages', isAuth, postsController.getAllMessages);
-
-// router.get('/user-messages', isAuth, postsController.getUserMessages);
 
 router.post(
   '/add-post',
@@ -43,27 +39,5 @@ router.post(
   isAuth,
   postsController.postEditPost
 );
-// router.get(
-//   '/edit-message/:messageId',
-//   isAuth,
-//   postsController.getEditMessage
-// );
-
-// router.post(
-//   '/edit-message',
-//   [
-//     body('title','Invalid Title')
-//       .isString()
-//       .isLength({ min: 1 })
-//       .trim(),
-//     body('messageContent','Message should be atleast 5 letters')
-//       .isLength({ min: 5, max: 400 })
-//       .trim()
-//   ],
-//   isAuth,
-//   postsController.postEditMessage
-// );
-
-// router.post('/delete-message', isAuth, postsController.postDeleteMessage);
 
 module.exports = router;
