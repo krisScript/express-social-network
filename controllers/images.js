@@ -24,7 +24,6 @@ exports.postImages = async (req, res, next) => {
     const imageUrl = imageFile.path;
     const errors = validationResult(req);
     const { description } = req.body;
-    console.log(imageFile);
     if (!imageFile) {
       const images = await Image.find({ userId: req.user._id });
       fileDelete(imageUrl);
@@ -47,7 +46,6 @@ exports.postImages = async (req, res, next) => {
         images
       });
     } else {
-      console.log(imageUrl);
       const image = new Image({
         imageUrl,
         description,
@@ -66,8 +64,10 @@ exports.postImages = async (req, res, next) => {
 exports.deleteImage = async (req, res, next) => {
   try {
     const { imageId } = req.params;
-    console.log(imageId);
-    await Image.findByIdAndDelete({ _id: imageId });
+    const imageItem = await Image.findById(imageId)
+    fileDelete(imageItem.imageUrl)
+    await Image.findByIdAndDelete({ _id: imageId })
+  
     res.redirect('/user-images');
   } catch (err) {
     errorFunc(err, next);

@@ -11,6 +11,7 @@ const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const postsRouter = require('./routes/posts');
 const imagesRouter = require('./routes/images')
+const friendsRouter = require('./routes/friends')
 //Controllers
 const errorController = require('./controllers/error');
 
@@ -108,6 +109,7 @@ app.use((req, res, next) => {
 });
 
 app.use(homeRouter);
+app.use(friendsRouter)
 app.use(postsRouter);
 app.use(authRouter);
 app.use(imagesRouter);

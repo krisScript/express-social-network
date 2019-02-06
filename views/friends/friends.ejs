@@ -1,0 +1,26 @@
+<%- include('../includes/head.ejs') %>
+    </head>
+  
+  <body>
+     <%- include('../includes/nav.ejs') %>
+
+  <section class="section">
+    <form class="box" id="autocomplete-form" action="/get-user" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" type="text" placeholder="Find a friend by User Name" name="userName" list="userNames">
+            <datalist id="userNames">
+                  
+            </datalist>
+          </div>
+          <div class="control">
+            <button class="button is-info">
+              Search
+            </button>
+          </div>
+        </div>
+    </form>
+   </section>
+  
+    <%- include('../includes/end.ejs') %>
