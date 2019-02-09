@@ -8,11 +8,11 @@ const router = express.Router();
 
 router.get('/user-friends/:userId', isAuth, friendsController.getFriendsPage);
 router.post(
-  '/get-autocomplete-user-names',
+  '/get-autocomplete-usernames',
   isAuth,
-  friendsController.getAutocompleteUserNames
+  friendsController.getAutocompleteUsernames
 );
-router.get('/check-user/:userName', isAuth, friendsController.checkUser);
+router.get('/check-user/:username', isAuth, friendsController.checkUser);
 router.post(
   '/send-friend-request/:requestTargetId',
   isAuth,

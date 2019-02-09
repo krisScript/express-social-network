@@ -22,7 +22,7 @@ exports.postAddPost = async (req, res, next) => {
       const post = new Post({
         title,
         postContent,
-        userName: req.user.userName,
+        username: req.user.username,
         userId: req.user.id
       });
       await post.save();

@@ -65,7 +65,7 @@
       <div class="dropdown-content">
           <% for (let friendRequest of friendRequests) { %>
             <div class="dropdown-item">
-                <p class="title is-size-4 has-text-centered"><%= friendRequest.senderUserName %></p>
+                <p class="title is-size-4 has-text-centered"><%= friendRequest.senderUsername%></p>
                 <form method="POST" action="/accept-friend-request/<%= friendRequest.sender %>" >
                   <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                   <button class="button accept-request-btn" data-sender-id="friendRequest.sender">Accept</button>

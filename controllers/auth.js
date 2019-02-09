@@ -53,7 +53,7 @@ exports.getSignup = (req, res, next) => {
     validationErrors: [],
     oldInput: {
       email: '',
-      userName: '',
+      username: '',
       firstName: '',
       lastName: '',
       password: '',
@@ -119,7 +119,7 @@ exports.postLogin = async (req, res, next) => {
 
 exports.postSignup = async (req, res, next) => {
   const {
-    userName,
+    username,
     firstName,
     lastName,
     email,
@@ -141,14 +141,14 @@ exports.postSignup = async (req, res, next) => {
           firstName,
           lastName,
           matchPassword,
-          userName
+          username
         },
         validationErrors: errors.array()
       });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
-      userName,
+      username,
       firstName,
       lastName,
       email,

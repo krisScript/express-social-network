@@ -9,8 +9,8 @@
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input class="input" type="text" placeholder="Find a friend by User Name" name="userName" list="userNames">
-            <datalist id="userNames">
+            <input class="input" type="text" placeholder="Find a friend by Username" name="username" list="usernames">
+            <datalist id="usernames">
                   
             </datalist>
           </div>
@@ -43,7 +43,7 @@
                   <div class="media">
                 
                     <div class="media-content">
-                      <p class="subittle is-size-6"><%= friend.friendId.userName %></p>
+                      <p class="subittle is-size-6"><%= friend.friendId.username %></p>
                       <p class="subitle is-size-6"><%= friend.friendId.firstName %> <%= friend.friendId.lastname %></p>
                       <p class="subtitle is-size-6"><%= friend.friendId.email %></p>
                     </div>

@@ -15,7 +15,7 @@ exports.getUserPage = async (req, res, next) => {
       autorized = false;
     }
     const {
-      userName,
+      username,
       firstName,
       lastName,
       email,
@@ -28,7 +28,7 @@ exports.getUserPage = async (req, res, next) => {
       path: '/user-page',
       title: 'My Page',
       posts: posts.reverse(),
-      userName,
+      username,
       firstName,
       lastName,
       profilePicture,
@@ -45,14 +45,14 @@ exports.postAddProfilePicture = async (req, res, next) => {
   try {
     const image = req.file;
     if (!image) {
-      const { userName, firstName, lastName, email, profilePicture } = req.user;
+      const { username, firstName, lastName, email, profilePicture } = req.user;
 
       const posts = await Post.find({ userId: req.user._id });
       return res.status(422).render('user/user-page', {
         title: 'My Page',
         path: '/user-page',
         posts: posts.reverse(),
-        userName,
+        username,
         firstName,
         lastName,
         profilePicture,

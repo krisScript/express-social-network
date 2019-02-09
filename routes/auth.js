@@ -26,12 +26,12 @@ router.post(
 router.post(
   '/signup',
   [
-    body('userName', 'User Name should be atlest 4 characters long')
+    body('username', 'User Name should be atlest 4 characters long')
       .isLength({ min: 4 })
       .isString()
       .trim()
-      .custom((userName, { req }) => {
-        return User.findOne({ userName }).then(userDoc => {
+      .custom((username, { req }) => {
+        return User.findOne({ username }).then(userDoc => {
           if (userDoc) {
             return Promise.reject('User Name is already taken');
           }

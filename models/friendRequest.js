@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const friendRequestSchema = new Schema({
-  senderUserName:{
+  senderUsername:{
     type: String,
     ref: 'User',
     required: true

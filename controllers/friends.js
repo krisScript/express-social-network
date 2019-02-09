@@ -23,7 +23,7 @@ exports.getFriendsPage = async (req, res, next) => {
     errorFunc(err, next);
   }
 };
-exports.getAutocompleteUserNames = async (req, res, next) => {
+exports.getAutocompleteUsernames = async (req, res, next) => {
   try {
     const { value } = req.body;
     client.get(value,async (err, data) => {
@@ -33,11 +33,11 @@ exports.getAutocompleteUserNames = async (req, res, next) => {
         return res.status(200).json({ data });
       } else {
         const autocompleteData = await User.find({
-          userName: new RegExp(value, 'i')
-        }).select('userName ');
+          username: new RegExp(value, 'i')
+        }).select('username ');
         if (autocompleteData.length > 0) {
           const autocompleteNames = autocompleteData.map(entry => {
-            return entry.userName;
+            return entry.username;
           });
           client.setex(value, cacheTime, JSON.stringify(autocompleteNames));
           console.log('not cahced')
@@ -54,8 +54,8 @@ exports.getAutocompleteUserNames = async (req, res, next) => {
 };
 exports.checkUser = async (req, res, next) => {
   try {
-    const { userName } = req.params;
-    const selectedUser = await User.find({ userName });
+    const { username } = req.params;
+    const selectedUser = await User.find({ username });
     if (selectedUser[0]) {
       const selectedUserId = selectedUser[0]._id;
       res.status(200).json({ userId: selectedUserId });
@@ -74,7 +74,7 @@ exports.sendFriendRequest = async (req, res, next) => {
     if (requestTargetId === authUserId) {
     } else {
       const friendRequest = new FriendRequest({
-        senderUserName:req.user.userName,
+        senderUsername:req.user.username,
         sender: mongoose.Types.ObjectId(authUserId),
         receiver: mongoose.Types.ObjectId(requestTargetId)
       });

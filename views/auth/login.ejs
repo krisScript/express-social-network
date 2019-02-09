@@ -6,7 +6,6 @@
    <section class="section">
      </div>
      <div class="box">
-       
       <h2 class="title is-size-4"><%= signup ? 'Sign Up' : 'Login' %></h2>
 
       <% if (errorMessage) { %>
@@ -19,7 +18,7 @@
           <div class="field">
             <label class="label">User Name</label>
             <div class="control has-icons-left has-icons-right">
-              <input class="input <%= validationErrors.find(e => e.param === 'userName') ? 'is-danger' : '' %>" type="text" placeholder="Enter your User Name" name="userName" required value="<%= signup ? oldInput.userName : '' %>">
+              <input class="input <%= validationErrors.find(e => e.param === 'username') ? 'is-danger' : '' %>" type="text" placeholder="Enter your User Name" name="username" required value="<%= signup ? oldInput.username : '' %>">
               <span class="icon is-small is-left">
               <i class="fas fa-user"></i>
               </span>

@@ -2,13 +2,13 @@ console.log('name');
 const autocompleteForm = document.querySelector('#autocomplete-form');
 const csrf = document.querySelector("[name='_csrf']").value;
 if (autocompleteForm) {
-  const autocompleteFormInput = document.querySelector(`[name='userName']`);
-  const autocompleteDataset = document.querySelector('#userNames');
+  const autocompleteFormInput = document.querySelector(`[name='username']`);
+  const autocompleteDataset = document.querySelector('#usernames');
   autocompleteFormInput.addEventListener('keyup', e => {
     console.log('up');
     const { value } = e.target;
     const valueData = { value };
-    fetch(`/get-autocomplete-user-names`, {
+    fetch(`/get-autocomplete-usernames`, {
       method: 'POST',
       body: JSON.stringify(valueData),
       headers: {
@@ -40,9 +40,9 @@ if (autocompleteForm) {
   });
   autocompleteForm.addEventListener('submit', e => {
     e.preventDefault();
-    const { userName } = e.target.elements;
-    console.log(userName);
-    fetch(`/check-user/${userName.value}`, {
+    const { username } = e.target.elements;
+    console.log(username);
+    fetch(`/check-user/${username.value}`, {
       method: 'GET',
       headers: {
         'csrf-token': csrf

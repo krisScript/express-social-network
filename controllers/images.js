@@ -63,7 +63,7 @@ exports.postImages = async (req, res, next) => {
       const image = new Image({
         imageUrl,
         description,
-        userName: req.user.userName,
+        username: req.user.username,
         userId: req.user._id
       });
 
