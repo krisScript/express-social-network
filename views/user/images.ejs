@@ -5,46 +5,50 @@
      <%- include('../includes/nav.ejs') %>
 
   <section class="section">
-      <form class="box" method="POST" enctype="multipart/form-data" action="/user-images">
-        <% if (errorMessage) { %>
-          <div class="notification is-danger">
-            <p><%= errorMessage %></p>
-          </div>
-        <% }  %>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <div class="field">
-            <label class="label">Description </label>
-            <div class="control has-icons-left has-icons-right">
-              <input class="input" type="text" placeholder="Text input" name="description" >
-              <span class="icon is-small is-left">
-                  <i class="fas fa-comment"></i>
-              </span>
+      <% if (autorized) { %>    
+        <form class="box" method="POST" enctype="multipart/form-data" action="/user-images/<%= userId %>">
+          <% if (errorMessage) { %>
+            <div class="notification is-danger">
+              <p><%= errorMessage %></p>
             </div>
-          </div>
-          <div class="field ">
-              <div class="file has-name is-primary">
-                  <label class="file-label">
-                    <input class="file-input" type="file" name="image" required>
-                    <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                      </span>
-                      <span class="file-label">
-                        Choose a file…
-                      </span>
-                    </span>
-                    <span class="file-name">
-                     Choose Image
-                    </span>
-                  </label>
-                </div>
+          <% }  %>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="field">
+              <label class="label">Description </label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" type="text" placeholder="Text input" name="description" >
+                <span class="icon is-small is-left">
+                    <i class="fas fa-comment"></i>
+                </span>
+              </div>
             </div>
-            <div class="field">
-                <div class="control ">
-                    <button  class="button is-primary">Post</button>
+            <div class="field ">
+                <div class="file has-name is-primary">
+                    <label class="file-label">
+                      <input class="file-input" type="file" name="image" required>
+                      <span class="file-cta">
+                        <span class="file-icon">
+                          <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          Choose a file…
+                        </span>
+                      </span>
+                      <span class="file-name">
+                       Choose Image
+                      </span>
+                    </label>
                   </div>
-            </div>
-      </form>
+              </div>
+              <div class="field">
+                  <div class="control ">
+                      <button  class="button is-primary">Post</button>
+                    </div>
+              </div>
+        </form>
+        <% }  %>
+                    
+      
   </section>
    <section class="section">
 
@@ -55,7 +59,7 @@
               <div class="card image-card">
                   <div class="card-image">
                       <figure class="image is-3by2">
-                       <img src="<%= image.imageUrl %>" alt="">
+                       <img src="/<%= image.imageUrl %>" alt="">
                       </figure>
                       <div class="card-content is-overlay is-clipped">
                         <span class="tag is-info">
@@ -63,11 +67,15 @@
                         </span>       
                       </div>
                   </div>
-                  <footer class="card-footer">
-                      <a class="card-footer-item" href="/delete-image/<%= image._id %>">
-                        delete
-                      </a>
-                  </footer>
+                  
+    <% if (autorized) { %>    
+      <footer class="card-footer">
+          <a class="card-footer-item" href="/delete-image/<%= image._id %>">
+            delete
+          </a>
+      </footer>
+      <% }  %>
+                  
               </div>
            </div>
       <% }  %> 
@@ -76,3 +84,6 @@
    </section>
   
     <%- include('../includes/end.ejs') %>
+
+
+    

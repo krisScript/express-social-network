@@ -17,7 +17,7 @@ exports.getAutocompleteUserNames = async (req, res, next) => {
     const { value } = req.body;
     const autocompleteData = await User.find({
       userName: new RegExp(value, 'i')
-    }).select('userName -_id');
+    }).select('userName ');
     if (autocompleteData.length > 0) {
       const autocompleteNames = autocompleteData.map(entry => {
         return entry.userName;
@@ -30,12 +30,18 @@ exports.getAutocompleteUserNames = async (req, res, next) => {
     errorFunc(err, next);
   }
 };
-exports.getUser = async (req, res, next) => {
+exports.checkUser = async (req, res, next) => {
   try {
-   const {userName}  = req.body
+   const {userName}  = req.params
    const selectedUser = await User.find({userName})
-   console.log(selectedUser)
+   if(selectedUser[0]){
+     const selectedUserId = selectedUser[0]._id
+     res.status(200).json({ userId: selectedUserId });
+   }else {
+     res.status(404).json({msg:'User Not Found!'})
+   }
   } catch (err) {
+    console.log(err)
     errorFunc(err, next);
   }
 };

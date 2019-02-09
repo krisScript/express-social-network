@@ -6,9 +6,9 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 const { body } = require('express-validator/check');
 
-router.get('/user-images', isAuth, imagesRouter.getImages);
+router.get('/user-images/:userId', isAuth, imagesRouter.getImages);
 router.post(
-  '/user-images',
+  '/user-images/:UserId',
   [
     body('description', 'Description must be atleast 3 characters long')
       .isString()

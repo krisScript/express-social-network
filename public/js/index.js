@@ -1,13 +1,13 @@
 const postForm = document.getElementById('post-form');
 const csrf = document.querySelector("[name='_csrf']").value;
-
+console.log('user-page')
 const deletePost = () => {
   const deleteBtnList = document.querySelectorAll('.delete-btn');
   if (deleteBtnList.length > 0) {
     deleteBtnList.forEach(deleteBtn => {
       deleteBtn.addEventListener('click', e => {
         const postId = e.target.getAttribute('data-postId');
-        fetch(`delete-post/${postId}`, {
+        fetch(`/delete-post/${postId}`, {
           method: 'DELETE',
           headers: {
             'csrf-token': csrf
@@ -136,9 +136,7 @@ const editPost = () => {
                   })
                   .then(response => {
                     if (response.msg === 'updated') {
-                      const postElement = document.getElementById(
-                        `post-${postId}`
-                      );
+               
                       const elementTitle = document.getElementById(
                         `title-${postId}`
                       );
@@ -148,6 +146,7 @@ const editPost = () => {
                         `content-${postId}`
                       );
                       elementContent.textContent = post.postContent;
+                      modal.remove();
                     } else {
                       const errorMsg = document.createElement('div');
                       errorMsg.className = 'notification is-danger';

@@ -8,7 +8,7 @@
           <div class="container">
               <% if (profilePicture) { %>    
                 <figure class="rounded-img-container">
-                    <img class="rounded-img" src="<%= profilePicture %>">
+                    <img class="rounded-img" src="/<%= profilePicture %>">
                   </figure>
                 <% }  else { %>
                   <span class="icon  is-large">
@@ -28,53 +28,58 @@
         <div class="hero-foot">
             <div class="tabs is-centered has-background-link">
                 <ul>
-                  <li class="is-active"><a href="/my-page">My Page</a></li>
-                  <li><a href="/user-images">Images</a></li>
-                  <li><a href="/user-friends">Friends</a></li>
+                  <li class="is-active"><a href="/user-page/<%= userId %>">My Page</a></li>
+                  <li><a href="/user-images/<%= pageOwnerId %>">Images</a></li>
+                  <li><a href="/user-friends/<%= userId %>">Friends</a></li>
                 </ul>
               </div>
         </div>
       </section>
    <section class="section columns">
-     <div class="column is-half">
-      <div class="columns is-multiline">
-        <div class="box column is-8">
-          <form  method="POST" enctype="multipart/form-data" id="form-profile-picture" action="/my-page">
-            <% if (errorMessage) { %>
-              <div class="notification is-danger">
-                <p><%= errorMessage %></p>
-              </div>
-            <% }  %>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-              <div class="field ">
-                  <div class="file has-name is-primary">
-                      <label class="file-label">
-                        <input class="file-input" type="file" name="image" required>
-                        <span class="file-cta">
-                          <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                          </span>
-                          <span class="file-label">
-                            Choose a file…
-                          </span>
-                        </span>
-                        <span class="file-name">
-                         Change your profile picture
-                        </span>
-                      </label>
+    <div class="column is-half">
+        <% if (autorized) { %>    
+          <div class="box column is-8">
+              <form  method="POST" enctype="multipart/form-data" id="form-profile-picture" action="/user-page/<%= pageOwnerId %>"">
+                <% if (errorMessage) { %>
+                  <div class="notification is-danger">
+                    <p><%= errorMessage %></p>
+                  </div>
+                <% }  %>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <div class="field ">
+                      <div class="file has-name is-primary">
+                          <label class="file-label">
+                            <input class="file-input" type="file" name="image" required>
+                            <span class="file-cta">
+                              <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                              </span>
+                              <span class="file-label">
+                                Choose a file…
+                              </span>
+                            </span>
+                            <span class="file-name">
+                             Change your profile picture
+                            </span>
+                          </label>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <div class="control ">
-                        <button  class="button is-primary">Change</button>
-                      </div>
-                </div>
-          </form>
-        </div>
+                    <div class="field">
+                        <div class="control ">
+                            <button  class="button is-primary">Change</button>
+                          </div>
+                    </div>
+              </form>
+            </div>
+          <% }  %>
+
+      <div class="columns is-multiline">
+        
       </div>
      </div>
 <div class="column is-half">
   <div class="columns is-multiline">
+    <% if (autorized) { %>    
       <div class="box column is-full">
           <form id="post-form">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -117,6 +122,8 @@
             </div>
           </form> 
   </div>
+                <% }  %>
+    
 
   <div class="column is-full columns is-multiline is-centered" id="posts-container">
       <% for (let post of posts) { %>
@@ -124,39 +131,44 @@
             <div class="box  column is-full" id="post-<%= post._id %>">
                 <article class="media" >
                     <figure class="media-left">
-                      <p class="image is-64x64">
-                        <img src="https://bulma.io/images/placeholders/128x128.png">
-                      </p>
+                        <% if (profilePicture) { %>    
+                          <figure class="rounded-img-container rounded-img-container--small">
+                              <img class="rounded-img" src="/<%= profilePicture %>">
+                            </figure>
+                          <% }  else { %>
+                            <span class="icon  is-large">
+                                <i class="fas fa-user-circle"></i>
+                              </span>
+                            <% } %>
                     </figure>
                     <div class="media-content">
                       <div class="content">
                         <p>
-                          <strong> <%= firstName %>  <%= lastName %></strong> <small> <%= email %></small>
+                          <strong class="title is-size-6"> <%= firstName %>  <%= lastName %></strong> 
                           <br>
-                          <strong><%= post.title %></strong>
+                          <strong id="title-<%= post._id %>"><%= post.title %></strong>
                           <br>
-                          <p> <%= post.postContent %></p>
+                          <p id="content-<%= post._id %>"> <%= post.postContent %></p>
                         </p>
                       </div>
                       <nav class="level is-mobile">
                         <div class="level-left">
-                            <a href="#" class="level-item">Save</a>
-                            <button  data-postId='<%= post._id %>' class="level-item edit-btn">Edit</button>
-                            <button data-postId='<%= post._id %>' class="level-item delete-btn">Delete</button>
+                          
+                        <% if (autorized) { %>    
+                          <a href="#" class="level-item">Save</a>
+                          <button  data-postId='<%= post._id %>' class="level-item edit-btn">Edit</button>
+                          <button data-postId='<%= post._id %>' class="level-item delete-btn">Delete</button>
+                          <% }  %>
+                                              
                         </div>
                       </nav>
                     </div>
                   </article>
             </div>
-            
-   
-        
-    
+
         <% }  %> 
   </div>
   </div>
-  
-  
     </div>  
      </div>      
    </section>
@@ -165,3 +177,6 @@
    
 
     <%- include('../includes/end.ejs') %>
+
+
+

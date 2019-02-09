@@ -6,8 +6,7 @@ const friendsController = require('../controllers/friends');
 
 const router = express.Router();
 
-router.get('/user-friends',isAuth,friendsController.getFriendsPage);
+router.get('/user-friends/:userId',isAuth,friendsController.getFriendsPage);
 router.post('/get-autocomplete-user-names',isAuth,friendsController.getAutocompleteUserNames)
-
-router.post('/get-user',isAuth,friendsController.getUser)
+router.get('/check-user/:userName',isAuth,friendsController.checkUser)
 module.exports = router;

@@ -97,6 +97,7 @@ app.use((req, res, next) => {
   User.findById(req.session.user._id)
     .then(user => {
       req.user = user;
+      res.locals.userId = user._id.toString()
       next();
     })
     .catch(err => console.log(err));
@@ -114,6 +115,7 @@ app.use(postsRouter);
 app.use(authRouter);
 app.use(imagesRouter);
 app.use(userRouter);
+
 
 
 process.on('unhandledRejection', (reason, p) => {

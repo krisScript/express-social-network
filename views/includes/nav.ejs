@@ -19,16 +19,15 @@
       <% if (isAuthenticated) { %>
       <div class="navbar-menu is-dark">
         <a class="navbar-item has-text-white" href="/">Home</a>
-        <a class="navbar-item has-text-white" href="/my-page"
-        >My Page</a
-      >
-  
+        <a class="navbar-item has-text-white" href="/user-page/<%= userId %>"
+          >My Page </a
+        >
       </div>
       <div class="navbar-dropdown">
         <a class="navbar-item " href="/">Home</a>
-        <a class="navbar-item " href="/my-page"
-        >My Page</a
-      >
+        <a class="navbar-item has-text-white" href="/user-page/<%= userId %>"
+          >My Page Test</a
+        >
         <hr class="navbar-divider" />
         <a class="navbar-item">
           Report an issue

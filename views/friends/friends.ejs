@@ -5,7 +5,7 @@
      <%- include('../includes/nav.ejs') %>
 
   <section class="section">
-    <form class="box" id="autocomplete-form" action="/get-user" method="POST">
+    <form class="box" id="autocomplete-form" >
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="field has-addons">
           <div class="control is-expanded">

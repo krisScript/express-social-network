@@ -6121,6 +6121,9 @@ label.panel-block {
   height: 130px;
   border-radius: 50%;
   overflow: hidden; }
+  .rounded-img-container--small {
+    width: 50px;
+    height: 50px; }
 
 .rounded-img {
   width: inherit;
