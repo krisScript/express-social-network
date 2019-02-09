@@ -2,6 +2,10 @@ const User = require('../models/user');
 const errorFunc = require('../util/errorFunc');
 const FriendRequest = require('../models/friendRequest');
 var mongoose = require('mongoose');
+
+const redis = require('redis');
+const client = redis.createClient();
+const cacheTime = 2000000
 exports.getFriendsPage = async (req, res, next) => {
   try {
      await req.user.populate('friends.friendId')
@@ -22,17 +26,28 @@ exports.getFriendsPage = async (req, res, next) => {
 exports.getAutocompleteUserNames = async (req, res, next) => {
   try {
     const { value } = req.body;
-    const autocompleteData = await User.find({
-      userName: new RegExp(value, 'i')
-    }).select('userName ');
-    if (autocompleteData.length > 0) {
-      const autocompleteNames = autocompleteData.map(entry => {
-        return entry.userName;
-      });
-      return res.status(200).json({ autocompleteNames });
-    } else {
-      return res.status(200).json({ msg: 'No users found' });
-    }
+    client.get(value,async (err, data) => {
+      if (data) {
+        console.log('cached')
+        console.log(data)
+        return res.status(200).json({ data });
+      } else {
+        const autocompleteData = await User.find({
+          userName: new RegExp(value, 'i')
+        }).select('userName ');
+        if (autocompleteData.length > 0) {
+          const autocompleteNames = autocompleteData.map(entry => {
+            return entry.userName;
+          });
+          client.setex(value, cacheTime, JSON.stringify(autocompleteNames));
+          console.log('not cahced')
+          return res.status(200).json({ autocompleteNames });
+        } else {
+          return res.status(200).json({ msg: 'No users found' });
+        }
+      }
+    });
+    
   } catch (err) {
     errorFunc(err, next);
   }
