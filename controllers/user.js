@@ -2,21 +2,27 @@ const Post = require('../models/post');
 const errorFunc = require('../util/errorFunc');
 const User = require('../models/user');
 const fileDelete = require('../util/fileDelete');
+const FriendRequest = require('../models/friendRequest');
 exports.getUserPage = async (req, res, next) => {
   try {
     const pageOwnerId = req.params.userId;
     const authUserId = req.user._id.toString();
-    const pageOwnerUser = await User.findById(pageOwnerId)
+    const pageOwnerUser = await User.findById(pageOwnerId);
     let autorized;
     if (authUserId === pageOwnerId) {
       autorized = true;
-      
-    }else {
-      autorized = false
+    } else {
+      autorized = false;
     }
-    const  {userName, firstName, lastName, email, profilePicture } = pageOwnerUser
+    const {
+      userName,
+      firstName,
+      lastName,
+      email,
+      profilePicture
+    } = pageOwnerUser;
     const posts = await Post.find({ userId: pageOwnerId });
-    console.log(posts)
+    const friendRequests = await FriendRequest.find({ receiver: req.user._id });
     res.render('user/user-page', {
       pageOwnerId,
       path: '/user-page',
@@ -29,6 +35,7 @@ exports.getUserPage = async (req, res, next) => {
       email,
       autorized,
       errorMessage: false,
+      friendRequests
     });
   } catch (err) {
     errorFunc(err, next);
@@ -37,7 +44,6 @@ exports.getUserPage = async (req, res, next) => {
 exports.postAddProfilePicture = async (req, res, next) => {
   try {
     const image = req.file;
-    console.log(image);
     if (!image) {
       const { userName, firstName, lastName, email, profilePicture } = req.user;
 

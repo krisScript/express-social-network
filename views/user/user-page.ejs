@@ -36,8 +36,51 @@
         </div>
       </section>
    <section class="section columns">
+      
     <div class="column is-half">
+        <% if (!autorized) { %>   
+          <div class="box column is-8">
+              <button class="button is-primary" id="friend-request-button" data-user-id="<%= pageOwnerId %>">
+                  <span class="icon">
+                      <i class="fas fa-user"></i>
+                  </span>
+                  <span>Add Friend</span>
+                </button>
+          </div>
+                <% }  %>
         <% if (autorized) { %>    
+          <div class="box is-size-8">
+            
+
+<div class="dropdown " id="friend-requests-dropdown"> 
+    <div class="dropdown-trigger">
+      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" >
+        <span>Friend Requests</span>
+        <span class="icon is-small">
+          <i class="fas fa-angle-down" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+      <div class="dropdown-content">
+          <% for (let friendRequest of friendRequests) { %>
+            <div class="dropdown-item">
+                <p class="title is-size-4 has-text-centered"><%= friendRequest.senderUserName %></p>
+                <form method="POST" action="/accept-friend-request/<%= friendRequest.sender %>" >
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button class="button accept-request-btn" data-sender-id="friendRequest.sender">Accept</button>
+                </form>
+                <form method="POST" action="/deny-friend-request/<%= friendRequest.sender %>">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button class="button deny-request-btn" data-sender-id="friendRequest.sender">Deny</button>
+                </form>
+            </div>
+            <% }  %> 
+      </div>
+    </div>
+  </div>
+              
+          </div>
           <div class="box column is-8">
               <form  method="POST" enctype="multipart/form-data" id="form-profile-picture" action="/user-page/<%= pageOwnerId %>"">
                 <% if (errorMessage) { %>
@@ -180,3 +223,4 @@
 
 
 
+ 

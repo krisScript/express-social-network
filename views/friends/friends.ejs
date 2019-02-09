@@ -22,5 +22,45 @@
         </div>
     </form>
    </section>
+   <section class="section">
+     <div class="columns is-multiline">
+      <% for (let friend of friends) { %>
+        <div class="column is-one-fifth">
+            <div class="card">
+                <div class="card-image">
+                    <% if (friend.friendId.profilePicture) { %>    
+                      <figure class="image is-4by3">
+                          <img src="/<%= friend.friendId.profilePicture %>" alt="Placeholder image">
+                        </figure>   
+                      <% }  else { %>
+                        <span class="icon  is-large">
+                            <i class="fas fa-user-circle"></i>
+                          </span>
+                        <% } %>
+                  
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                
+                    <div class="media-content">
+                      <p class="subittle is-size-6"><%= friend.friendId.userName %></p>
+                      <p class="subitle is-size-6"><%= friend.friendId.firstName %> <%= friend.friendId.lastname %></p>
+                      <p class="subtitle is-size-6"><%= friend.friendId.email %></p>
+                    </div>
+                  </div>
+              
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                    <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <a href=""></a>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <% }  %> 
+     </div>
+   </section>
   
     <%- include('../includes/end.ejs') %>

@@ -1,6 +1,6 @@
 const postForm = document.getElementById('post-form');
 const csrf = document.querySelector("[name='_csrf']").value;
-console.log('user-page')
+console.log('user-page');
 const deletePost = () => {
   const deleteBtnList = document.querySelectorAll('.delete-btn');
   if (deleteBtnList.length > 0) {
@@ -136,7 +136,6 @@ const editPost = () => {
                   })
                   .then(response => {
                     if (response.msg === 'updated') {
-               
                       const elementTitle = document.getElementById(
                         `title-${postId}`
                       );
@@ -252,3 +251,42 @@ if (postForm) {
 }
 editPost();
 deletePost();
+
+const sendFriendRequest = () => {
+  const friendRequestBtn = document.querySelector('#friend-request-button');
+  if (friendRequestBtn) {
+    friendRequestBtn.addEventListener('click', e => {
+      let pageOwnerId;
+      if (e.target.id === 'friend-request-button') {
+        console.log('yeah');
+        pageOwnerId = e.target.getAttribute('data-user-id');
+      } else {
+        const parentElement = e.target.parentElement;
+        pageOwnerId = parentElement.getAttribute('data-user-id');
+      }
+      console.log(pageOwnerId);
+      fetch(`/send-friend-request/${pageOwnerId}`, {
+        method: 'POST',
+        headers: {
+          'csrf-token': csrf,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          console.log(response);
+        });
+    });
+  }
+};
+sendFriendRequest();
+const friendRequestDropDown = document.querySelector(
+  '#friend-requests-dropdown'
+);
+if (friendRequestDropDown) {
+  friendRequestDropDown.addEventListener('click', e => {
+    friendRequestDropDown.classList.toggle('is-active');
+  });
+}

@@ -28,10 +28,20 @@ const userSchema = new Schema({
     default: Date.now
   },
   profilePicture: {
-    type: String,
+    type: String
   },
   resetToken: String,
   resetTokenExpiration: Date,
+  friends: [
+    {
+      friendId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      }
+    }
+  ]
+
   // postsData: {
   //   posts: [
   //     {
@@ -45,18 +55,16 @@ const userSchema = new Schema({
   // }
 });
 
-// userSchema.methods.addPost = function(post) {
-//   const updatedPosts = [...this.postsData.posts];
-//   updatedPosts.push({
-//     postId: post._id
-//   });
-//   const updatedPostsData = {
-//     posts: updatedPosts
-//   };
-//   this.postsData = updatedPostsData;
+userSchema.methods.addFriend = function(friend) {
+  const updatedFriends = [...this.friends];
+  updatedFriends.push({
+    friendId: friend._id
+  });
 
-//   return this.save();
-// };
+  this.friends = updatedFriends;
+
+  return this.save();
+};
 
 // userSchema.methods.removePost = post => {
 //   const updatedPosts = this.postsData.posts.filter(item => {
