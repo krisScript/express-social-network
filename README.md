@@ -3,6 +3,7 @@
 
 ## Getting Started
 
+
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 
@@ -43,6 +44,12 @@ yarn start
 
 ```
 npm start
+```
+
+## Start WEBDASH
+
+```
+npx webdash serve
 ```
 
 ## Authors
