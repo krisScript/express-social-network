@@ -76,7 +76,9 @@
        <div class="field is-grouped">
          <div class="control">
            <button class="button is-link"><%= signup ? 'Sign Up' : 'Login' %></button>
-           <a class="is-dark" href="/reset">Forgot your password?</a>
+           <% if (!signup) { %>
+            <a class="is-dark" href="/reset">Forgot your password?</a>
+            <% }  %>
          </div>
        </div>
       </form>

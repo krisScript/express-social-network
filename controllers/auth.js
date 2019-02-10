@@ -187,7 +187,8 @@ exports.getReset = (req, res, next) => {
   res.render('auth/reset', {
     path: '/reset',
     title: 'Reset Password',
-    errorMessage: message
+    errorMessage: message,
+    validationErrors:[],
   });
 };
 
@@ -204,16 +205,17 @@ exports.postReset = (req, res, next) => {
     user.resetToken = token;
     user.resetTokenExpiration = Date.now() + 3600000;
     await user.save();
-    res.redirect('/');
+    const {email} = user
     transporter.sendMail({
-      to: req.body.email,
-      from: 'auth@mail.com',
-      subject: 'Password reset',
-      html: `
-          <a href="http://localhost:3000/reset/${token}">Reset</a>
-          <p>You requested a password reset></p>
-      `
+      to: email,
+      from: 'someTestMailAuth@gmail.com',
+      subject: 'Reset Y',
+      html:  `
+      <a href="http://localhost:3000/reset/${token}">Reset</a>
+      <p>You requested a password reset></p>`
+      
     });
+    res.redirect('/login')
   });
 };
 
@@ -253,7 +255,6 @@ exports.postNewPassword = async (req, res, next) => {
     });
     resetUser = user;
     const hashedPassword = await bcrypt.hash(newPassword, 12);
-
     resetUser.password = hashedPassword;
     resetUser.resetToken = undefined;
     resetTokenExpiration = undefined;
