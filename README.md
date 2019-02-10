@@ -1,5 +1,15 @@
 # Express social Netork 
 
+The user is able to:
+* Sign Up 
+* Login
+* Restore his/her password
+* Upload profile picture and change it at any time
+* Create,edit and delete posts
+* Upload and delete image with descriptions
+* Search and invite friends
+
+## Icons by [Font Awesome](https://fontawesome.com/)
 
 ## Getting Started
 
