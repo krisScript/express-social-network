@@ -10,8 +10,8 @@ const homeRouter = require('./routes/home');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const postsRouter = require('./routes/posts');
-const imagesRouter = require('./routes/images')
-const friendsRouter = require('./routes/friends')
+const imagesRouter = require('./routes/images');
+const friendsRouter = require('./routes/friends');
 //Controllers
 const errorController = require('./controllers/error');
 
@@ -25,11 +25,13 @@ const flash = require('connect-flash');
 const sassMiddleware = require('node-sass-middleware');
 const randomstring = require('randomstring');
 const multer = require('multer');
-const helmet = require('helmet')
-const compression = require('compression')
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const fs = require('fs');
 const app = express();
 
-const {MONGODB_URI} = require('./config/keys')
+const { MONGODB_URI } = require('./config/keys');
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
@@ -43,9 +45,7 @@ const fileStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-      `${new Date().toISOString().replace(/:/g, '-')}` +
-        '-' +
-        file.originalname
+      `${new Date().toISOString().replace(/:/g, '-')}` + '-' + file.originalname
     );
   }
 });
@@ -89,8 +89,14 @@ app.use(
     store
   })
 );
-app.use(compression())
-app.use(helmet())
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+app.use(compression());
+app.user(morgan('combined', { stream: accessLogStream }));
+
+app.use(helmet());
 app.use(csrfProtection);
 app.use(flash());
 
@@ -101,7 +107,7 @@ app.use((req, res, next) => {
   User.findById(req.session.user._id)
     .then(user => {
       req.user = user;
-      res.locals.userId = user._id.toString()
+      res.locals.userId = user._id.toString();
       next();
     })
     .catch(err => console.log(err));
@@ -114,13 +120,11 @@ app.use((req, res, next) => {
 });
 
 app.use(homeRouter);
-app.use(friendsRouter)
+app.use(friendsRouter);
 app.use(postsRouter);
 app.use(authRouter);
 app.use(imagesRouter);
 app.use(userRouter);
-
-
 
 process.on('unhandledRejection', (reason, p) => {
   console.log(reason);
