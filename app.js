@@ -25,9 +25,10 @@ const flash = require('connect-flash');
 const sassMiddleware = require('node-sass-middleware');
 const randomstring = require('randomstring');
 const multer = require('multer');
+const helmet = require('helmet')
 const app = express();
 
-const MONGODB_URI = require('./config/keys').mongoURI;
+const {MONGODB_URI} = require('./config/keys')
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
@@ -87,6 +88,7 @@ app.use(
     store
   })
 );
+app.user(helmet())
 app.use(csrfProtection);
 app.use(flash());
 
