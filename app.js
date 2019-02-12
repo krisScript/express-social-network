@@ -26,6 +26,7 @@ const sassMiddleware = require('node-sass-middleware');
 const randomstring = require('randomstring');
 const multer = require('multer');
 const helmet = require('helmet')
+const compression = require('compression')
 const app = express();
 
 const {MONGODB_URI} = require('./config/keys')
@@ -88,7 +89,8 @@ app.use(
     store
   })
 );
-app.user(helmet())
+app.use(compression())
+app.use(helmet())
 app.use(csrfProtection);
 app.use(flash());
 
@@ -128,13 +130,13 @@ app.get('/500', errorController.get500);
 
 app.use(errorController.get404);
 
-// app.use((error, req, res, next) => {
-//   res.status(500).render('500', {
-//     title: 'Error!',
-//     path: '/500',
-//     isAuthenticated: req.session.isLoggedIn
-//   });
-// });
+app.use((error, req, res, next) => {
+  res.status(500).render('500', {
+    title: 'Error!',
+    path: '/500',
+    isAuthenticated: req.session.isLoggedIn
+  });
+});
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
